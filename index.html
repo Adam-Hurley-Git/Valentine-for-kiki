@@ -6,7 +6,7 @@
   <title>Be My Valentine 💘</title>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet">
 
   <!-- Swiper -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -24,22 +24,32 @@
     :root {
       --pink-soft: #ff9a9e;
       --pink-hot: #ff4d6d;
+      --pink-blush: #ff6b8a;
       --purple-soft: #a18cd1;
       --lavender: #fbc2eb;
       --peach: #fad0c4;
       --cream: #fff9f0;
+      --rose-gold: #b76e79;
+      --gold: #d4a574;
+      --gold-light: #f0d9b5;
       --text-dark: #4a1c2f;
       --text-medium: #6b4c5a;
       --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-bg-strong: rgba(255, 255, 255, 0.88);
       --font-display: 'Playfair Display', serif;
       --font-body: 'Poppins', sans-serif;
       --font-handwritten: 'Dancing Script', cursive;
+      --font-elegant: 'Great Vibes', cursive;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -66,6 +76,50 @@
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+    }
+
+    /* ============================================
+       SCROLL PROGRESS BAR
+       ============================================ */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--pink-hot), var(--lavender), var(--purple-soft), var(--pink-hot));
+      background-size: 300% 100%;
+      animation: progressShimmer 3s linear infinite;
+      z-index: 10000;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+      display: none;
+    }
+
+    @keyframes progressShimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    /* ============================================
+       SCREEN FLASH OVERLAY
+       ============================================ */
+    .screen-flash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.95), rgba(255,182,193,0.8));
+      z-index: 9998;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .screen-flash--active {
+      animation: screenFlash 1.2s ease-out forwards;
+    }
+
+    @keyframes screenFlash {
+      0% { opacity: 0; }
+      15% { opacity: 1; }
+      100% { opacity: 0; }
     }
 
     /* ============================================
@@ -195,11 +249,11 @@
 
     @keyframes floatUp {
       from {
-        transform: translateY(0) scale(1);
+        transform: translateY(0) scale(1) rotate(0deg);
         opacity: 1;
       }
       to {
-        transform: translateY(-120vh) scale(1.8);
+        transform: translateY(-120vh) scale(1.8) rotate(20deg);
         opacity: 0;
       }
     }
@@ -215,11 +269,11 @@
 
     .experience--active {
       display: block;
-      animation: experienceIn 1200ms ease forwards;
+      animation: experienceIn 1400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes experienceIn {
-      from { opacity: 0; transform: translateY(30px); }
+      from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -231,7 +285,7 @@
       font-size: clamp(28px, 5vw, 42px);
       color: var(--text-dark);
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       position: relative;
     }
 
@@ -245,9 +299,22 @@
 
     .section-divider {
       text-align: center;
-      font-size: 20px;
-      margin: 0 auto 30px;
-      letter-spacing: 8px;
+      font-size: 14px;
+      margin: 0 auto 36px;
+      letter-spacing: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: var(--rose-gold);
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      height: 1px;
+      width: 60px;
+      background: linear-gradient(90deg, transparent, var(--rose-gold), transparent);
     }
 
     /* ============================================
@@ -262,46 +329,100 @@
       padding: 60px 20px;
       position: relative;
       z-index: 1;
+      overflow: hidden;
+    }
+
+    /* Floating particles canvas behind hero */
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .hero-content {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 50px;
+      padding: 8px 24px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: white;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
 
     .hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(36px, 8vw, 64px);
+      font-family: var(--font-elegant);
+      font-size: clamp(42px, 10vw, 80px);
       color: white;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      margin-bottom: 12px;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+      line-height: 1.1;
     }
 
     .hero-subtitle {
       font-family: var(--font-handwritten);
-      font-size: clamp(20px, 4vw, 32px);
-      color: rgba(255,255,255,0.9);
+      font-size: clamp(20px, 4vw, 30px);
+      color: rgba(255,255,255,0.92);
       text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .hero-heart-divider {
-      font-size: 32px;
+      font-size: 28px;
       animation: heartbeat 1.8s infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .hero-heart-divider::before,
+    .hero-heart-divider::after {
+      content: '';
+      height: 1px;
+      width: 50px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
     }
 
     .hero-photo-frame {
-      width: min(85%, 450px);
-      border-radius: 24px;
+      width: min(85%, 480px);
+      border-radius: 28px;
       overflow: hidden;
-      border: 6px solid rgba(255,255,255,0.7);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+      box-shadow:
+        0 25px 80px rgba(0,0,0,0.25),
+        0 0 0 3px rgba(255,255,255,0.5),
+        0 0 0 6px rgba(255,255,255,0.2);
       transform: rotate(-2deg);
-      transition: transform 0.4s ease;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .hero-photo-frame:hover {
-      transform: rotate(0deg) scale(1.02);
+      transform: rotate(0deg) scale(1.03);
+    }
+
+    .hero-photo-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.15));
+      pointer-events: none;
+      border-radius: 28px;
     }
 
     .hero-main-photo {
@@ -311,6 +432,135 @@
       aspect-ratio: 4/3;
       object-fit: cover;
       background: linear-gradient(135deg, var(--lavender), var(--peach));
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: scrollHintFloat 2s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .scroll-hint span {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .scroll-hint-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid rgba(255,255,255,0.6);
+      border-bottom: 2px solid rgba(255,255,255,0.6);
+      transform: rotate(45deg);
+    }
+
+    @keyframes scrollHintFloat {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      50% { transform: translateX(-50%) translateY(10px); opacity: 0.5; }
+    }
+
+    /* ============================================
+       SECTION: TIMELINE
+       ============================================ */
+    .section-timeline {
+      padding: 80px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--pink-hot), var(--lavender), var(--purple-soft), transparent);
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .timeline-item:nth-child(odd) {
+      flex-direction: row-reverse;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink-hot), var(--lavender));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 20px rgba(255,77,109,0.35);
+      z-index: 2;
+      border: 3px solid white;
+    }
+
+    .timeline-card {
+      width: calc(50% - 48px);
+      background: var(--glass-bg-strong);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,255,255,0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .timeline-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+    }
+
+    .timeline-date {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--pink-hot);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .timeline-text {
+      font-family: var(--font-handwritten);
+      font-size: 17px;
+      color: var(--text-medium);
+      line-height: 1.5;
     }
 
     /* ============================================
@@ -329,41 +579,85 @@
 
     .hero-swiper .swiper-slide {
       width: 320px;
-      border-radius: 20px;
+      border-radius: 24px;
       overflow: hidden;
       background: white;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.12);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .hero-swiper .swiper-slide-active {
+      box-shadow: 0 20px 60px rgba(255,77,109,0.2);
     }
 
     .hero-swiper .swiper-slide img {
       width: 100%;
-      height: 280px;
+      height: 300px;
       object-fit: cover;
       display: block;
       background: linear-gradient(135deg, var(--lavender), var(--peach));
+      transition: transform 0.5s ease;
+    }
+
+    .hero-swiper .swiper-slide:hover img {
+      transform: scale(1.05);
     }
 
     .slide-caption {
       font-family: var(--font-handwritten);
-      font-size: 18px;
+      font-size: 19px;
       color: var(--text-medium);
       text-align: center;
-      padding: 16px 12px;
+      padding: 18px 16px;
+      position: relative;
+    }
+
+    .slide-caption::before {
+      content: '✦';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8px;
+      color: var(--pink-soft);
+    }
+
+    .swiper-pagination-bullet {
+      width: 10px !important;
+      height: 10px !important;
+      transition: all 0.3s ease !important;
     }
 
     .swiper-pagination-bullet-active {
       background: var(--pink-hot) !important;
+      width: 28px !important;
+      border-radius: 5px !important;
     }
 
     .swiper-button-prev,
     .swiper-button-next {
-      color: var(--pink-hot) !important;
+      width: 44px !important;
+      height: 44px !important;
+      background: rgba(255,255,255,0.85) !important;
+      backdrop-filter: blur(8px);
+      border-radius: 50% !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .swiper-button-prev:hover,
+    .swiper-button-next:hover {
+      background: white !important;
+      box-shadow: 0 6px 24px rgba(255,77,109,0.2);
+      transform: scale(1.1);
     }
 
     .swiper-button-prev::after,
     .swiper-button-next::after {
-      font-size: 24px !important;
+      font-size: 18px !important;
+      color: var(--pink-hot) !important;
+      font-weight: bold !important;
     }
 
     /* ============================================
@@ -377,8 +671,8 @@
 
     .polaroid-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 36px;
       max-width: 1100px;
       margin: 0 auto;
       padding: 0 20px;
@@ -386,38 +680,128 @@
 
     .polaroid {
       background: white;
-      padding: 12px 12px 44px 12px;
-      border-radius: 4px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 14px 14px 52px 14px;
+      border-radius: 6px;
+      box-shadow:
+        0 4px 20px rgba(0,0,0,0.08),
+        0 1px 3px rgba(0,0,0,0.06);
       transform: rotate(var(--rotate, 0deg));
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
       cursor: pointer;
+      position: relative;
     }
 
     .polaroid:hover {
-      transform: rotate(0deg) translateY(-8px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+      transform: rotate(0deg) translateY(-12px) scale(1.02);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.16);
+    }
+
+    /* Tape decoration */
+    .polaroid::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%) rotate(var(--tape-rotate, -2deg));
+      width: 60px;
+      height: 22px;
+      background: rgba(255, 235, 200, 0.7);
+      border-radius: 2px;
+      z-index: 2;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
 
     .polaroid a {
       display: block;
+      overflow: hidden;
+      border-radius: 3px;
     }
 
     .polaroid img {
       width: 100%;
       aspect-ratio: 1;
       object-fit: cover;
-      border-radius: 2px;
+      border-radius: 3px;
       display: block;
       background: linear-gradient(135deg, var(--lavender), var(--peach));
+      transition: transform 0.5s ease;
+    }
+
+    .polaroid:hover img {
+      transform: scale(1.08);
     }
 
     .polaroid-caption {
       font-family: var(--font-handwritten);
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text-medium);
       text-align: center;
-      margin-top: 12px;
+      margin-top: 14px;
+    }
+
+    /* ============================================
+       SECTION: REASONS I LOVE YOU
+       ============================================ */
+    .section-reasons {
+      padding: 80px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .reasons-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 24px;
+      padding: 0 20px;
+    }
+
+    .reason-card {
+      background: var(--glass-bg-strong);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reason-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--pink-hot), var(--lavender), var(--purple-soft));
+    }
+
+    .reason-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(255,77,109,0.15);
+    }
+
+    .reason-emoji {
+      font-size: 40px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .reason-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .reason-text {
+      font-family: var(--font-handwritten);
+      font-size: 17px;
+      color: var(--text-medium);
+      line-height: 1.4;
     }
 
     /* ============================================
@@ -431,15 +815,24 @@
       z-index: 1;
     }
 
+    .letter-wrapper {
+      perspective: 1000px;
+      max-width: 620px;
+      width: 100%;
+    }
+
     .letter-container {
-      max-width: 600px;
+      max-width: 620px;
       width: 100%;
       background: var(--cream);
-      border-radius: 8px;
-      padding: 50px 40px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 56px 44px;
+      box-shadow:
+        0 12px 56px rgba(0,0,0,0.1),
+        0 2px 8px rgba(0,0,0,0.05),
+        inset 0 0 80px rgba(200,170,140,0.08);
       position: relative;
-      border: 1px solid rgba(200,170,140,0.3);
+      border: 1px solid rgba(200,170,140,0.2);
     }
 
     .letter-container::before {
@@ -450,25 +843,56 @@
         repeating-linear-gradient(
           transparent,
           transparent 31px,
-          rgba(200,170,140,0.15) 31px,
-          rgba(200,170,140,0.15) 32px
+          rgba(200,170,140,0.12) 31px,
+          rgba(200,170,140,0.12) 32px
         );
       pointer-events: none;
-      border-radius: 8px;
+      border-radius: 12px;
+    }
+
+    /* Red margin line */
+    .letter-container::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 44px;
+      width: 1px;
+      background: rgba(220,80,80,0.15);
+      pointer-events: none;
+    }
+
+    .letter-wax-seal {
+      position: absolute;
+      top: -20px;
+      right: 30px;
+      width: 56px;
+      height: 56px;
+      background: radial-gradient(circle at 35% 35%, #d44, #8b0000);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow:
+        0 4px 16px rgba(139,0,0,0.35),
+        inset 0 -2px 6px rgba(0,0,0,0.2),
+        inset 0 2px 6px rgba(255,255,255,0.15);
+      z-index: 2;
+      transform: rotate(-15deg);
     }
 
     .letter-decoration {
       text-align: center;
-      font-size: 48px;
-      margin-bottom: 16px;
+      font-size: 38px;
+      margin-bottom: 12px;
     }
 
     .letter-title {
-      font-family: var(--font-display);
-      font-size: clamp(24px, 5vw, 34px);
+      font-family: var(--font-elegant);
+      font-size: clamp(28px, 5vw, 40px);
       color: var(--text-dark);
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 32px;
     }
 
     .letter-body {
@@ -476,47 +900,135 @@
       font-size: 20px;
       color: var(--text-dark);
       line-height: 2;
+      position: relative;
+      z-index: 1;
     }
 
     .letter-body p {
       margin-bottom: 16px;
     }
 
-    .letter-signature {
-      margin-top: 24px;
-      font-size: 22px;
+    .letter-body .letter-greeting {
+      font-size: 24px;
       font-weight: 600;
+      color: var(--pink-hot);
+    }
+
+    .letter-signature {
+      margin-top: 28px;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--rose-gold);
+    }
+
+    /* ============================================
+       SECTION: PROMISE / CTA
+       ============================================ */
+    .section-promise {
+      padding: 100px 20px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .promise-card {
+      max-width: 550px;
+      margin: 0 auto;
+      background: var(--glass-bg-strong);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 32px;
+      padding: 56px 40px;
+      box-shadow: 0 20px 64px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .promise-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 34px;
+      background: linear-gradient(135deg, var(--pink-hot), var(--lavender), var(--purple-soft), var(--pink-hot));
+      background-size: 300% 300%;
+      animation: promiseBorderShift 6s ease infinite;
+      z-index: -1;
+      opacity: 0.4;
+      filter: blur(1px);
+    }
+
+    @keyframes promiseBorderShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .promise-emoji {
+      font-size: 52px;
+      margin-bottom: 20px;
+      display: block;
+      animation: heartbeat 1.8s infinite;
+    }
+
+    .promise-title {
+      font-family: var(--font-elegant);
+      font-size: clamp(32px, 6vw, 48px);
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .promise-text {
+      font-family: var(--font-handwritten);
+      font-size: 22px;
+      color: var(--text-medium);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .promise-hearts {
+      font-size: 24px;
+      letter-spacing: 8px;
+      animation: heartbeat 1.8s infinite;
     }
 
     /* ============================================
        FOOTER
        ============================================ */
     .section-footer {
-      padding: 60px 20px 40px;
+      padding: 60px 20px 48px;
       text-align: center;
       position: relative;
       z-index: 1;
     }
 
     .footer-hearts {
-      font-size: 28px;
-      letter-spacing: 12px;
+      font-size: 24px;
+      letter-spacing: 10px;
       margin-bottom: 16px;
       animation: heartbeat 1.8s infinite;
     }
 
     .footer-text {
-      font-family: var(--font-handwritten);
-      font-size: 20px;
-      color: rgba(255,255,255,0.9);
-      text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-family: var(--font-elegant);
+      font-size: 26px;
+      color: rgba(255,255,255,0.92);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.1);
       margin-bottom: 8px;
     }
 
     .footer-year {
       font-family: var(--font-body);
-      font-size: 14px;
-      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: rgba(255,255,255,0.3);
+      margin: 16px auto;
     }
 
     /* ============================================
@@ -526,23 +1038,24 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      width: 50px;
-      height: 50px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       border: none;
-      background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
       font-size: 22px;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
       z-index: 100;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
       display: none;
+      border: 1px solid rgba(255,255,255,0.4);
     }
 
     .music-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+      transform: scale(1.15);
+      box-shadow: 0 8px 32px rgba(255,77,109,0.25);
     }
 
     .music-btn.playing {
@@ -551,7 +1064,38 @@
 
     @keyframes musicPulse {
       0%, 100% { box-shadow: 0 4px 20px rgba(255,77,109,0.3); }
-      50% { box-shadow: 0 4px 30px rgba(255,77,109,0.6); }
+      50% { box-shadow: 0 4px 36px rgba(255,77,109,0.6); }
+    }
+
+    /* ============================================
+       BACK TO TOP
+       ============================================ */
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(10px);
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      z-index: 100;
+      display: none;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.4);
+      opacity: 0;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+    }
+
+    .back-to-top:hover {
+      transform: scale(1.15) translateY(-2px);
     }
 
     /* ============================================
@@ -560,14 +1104,15 @@
     .sparkle {
       position: fixed;
       pointer-events: none;
-      font-size: 14px;
-      animation: sparkleAnim 800ms ease forwards;
+      font-size: 16px;
+      animation: sparkleAnim 900ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
       z-index: 9999;
     }
 
     @keyframes sparkleAnim {
-      0% { opacity: 1; transform: scale(1) translateY(0); }
-      100% { opacity: 0; transform: scale(0.3) translateY(-30px); }
+      0% { opacity: 1; transform: scale(0.5) translateY(0) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1.2) translateY(-15px) rotate(180deg); }
+      100% { opacity: 0; transform: scale(0.2) translateY(-40px) rotate(360deg); }
     }
 
     /* ============================================
@@ -584,17 +1129,52 @@
 
       .polaroid-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 24px;
         padding: 0 10px;
       }
 
       .letter-container {
-        padding: 36px 28px;
+        padding: 40px 28px;
+      }
+
+      .letter-container::after {
+        left: 28px;
       }
 
       .swiper-button-prev,
       .swiper-button-next {
-        display: none;
+        display: none !important;
+      }
+
+      .timeline::before {
+        left: 24px;
+      }
+
+      .timeline-item,
+      .timeline-item:nth-child(odd) {
+        flex-direction: row;
+        padding-left: 60px;
+      }
+
+      .timeline-dot {
+        left: 24px;
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+
+      .timeline-card {
+        width: 100%;
+      }
+
+      .reasons-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        padding: 0 10px;
+      }
+
+      .reason-card {
+        padding: 24px 16px;
       }
     }
 
@@ -620,13 +1200,33 @@
       }
 
       .letter-container {
-        padding: 28px 20px;
+        padding: 32px 22px;
+      }
+
+      .letter-container::after {
+        left: 22px;
+      }
+
+      .reasons-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      .timeline-card {
+        padding: 20px;
       }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Screen flash overlay -->
+  <div class="screen-flash" id="screenFlash"></div>
 
   <!-- ============================================
        PROPOSAL CARD (existing)
@@ -649,61 +1249,101 @@
   <div id="valentine-experience" class="experience">
 
     <!-- HERO -->
-    <section class="section-hero">
+    <section class="section-hero" id="heroSection">
+      <canvas class="hero-particles" id="heroParticles"></canvas>
       <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
+        <div class="hero-badge">She said yes</div>
         <h1 class="hero-title">Our Love Story</h1>
-        <p class="hero-subtitle">Every moment with you is a gift</p>
+        <p class="hero-subtitle">Every moment with you is a gift I never want to stop unwrapping</p>
         <div class="hero-heart-divider">💕</div>
       </div>
-      <div class="hero-photo-frame" data-aos="zoom-in" data-aos-delay="400">
-        <!-- Replace src with your main couple photo -->
+      <div class="hero-photo-frame" data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1200">
         <img src="photos/hero-1.jpg" alt="Us together" class="hero-main-photo" />
+      </div>
+      <div class="scroll-hint" data-aos="fade-up" data-aos-delay="1200">
+        <span>Scroll</span>
+        <div class="scroll-hint-arrow"></div>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="section-timeline">
+      <h2 class="section-title" data-aos="fade-up">Our Journey Together</h2>
+      <div class="section-divider" data-aos="fade-up" data-aos-delay="100">💕</div>
+
+      <div class="timeline">
+        <div class="timeline-item" data-aos="fade-right" data-aos-delay="0">
+          <div class="timeline-dot">🌟</div>
+          <div class="timeline-card">
+            <p class="timeline-date">The Beginning</p>
+            <h3 class="timeline-title">The Day We Met</h3>
+            <p class="timeline-text">That first moment I saw your smile, and everything changed forever.</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-left" data-aos-delay="150">
+          <div class="timeline-dot">☕</div>
+          <div class="timeline-card">
+            <p class="timeline-date">First Date</p>
+            <h3 class="timeline-title">Coffee & Butterflies</h3>
+            <p class="timeline-text">Nervous laughs, warm conversations, and knowing this was something special.</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-right" data-aos-delay="300">
+          <div class="timeline-dot">💗</div>
+          <div class="timeline-card">
+            <p class="timeline-date">The Moment</p>
+            <h3 class="timeline-title">Falling In Love</h3>
+            <p class="timeline-text">I didn't fall slowly — it hit me all at once. I just knew.</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-left" data-aos-delay="450">
+          <div class="timeline-dot">🥰</div>
+          <div class="timeline-card">
+            <p class="timeline-date">Today & Forever</p>
+            <h3 class="timeline-title">Us, Right Now</h3>
+            <p class="timeline-text">Every day with you feels like the best day yet. Here's to a million more.</p>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- PHOTO CAROUSEL -->
     <section class="section-carousel">
       <h2 class="section-title" data-aos="fade-up">Our Favorite Moments</h2>
-      <div class="section-divider" data-aos="fade-up" data-aos-delay="100">💗 💗 💗</div>
+      <div class="section-divider" data-aos="fade-up" data-aos-delay="100">💗</div>
 
       <div class="swiper hero-swiper" data-aos="fade-up" data-aos-delay="200">
         <div class="swiper-wrapper">
-          <!-- Slide 1 -->
           <div class="swiper-slide">
             <a href="photos/hero-1.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Our first memory together">
               <img src="photos/hero-1.jpg" alt="Memory 1" loading="lazy" />
             </a>
             <p class="slide-caption">Our first memory together</p>
           </div>
-          <!-- Slide 2 -->
           <div class="swiper-slide">
             <a href="photos/hero-2.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Adventures with you">
               <img src="photos/hero-2.jpg" alt="Memory 2" loading="lazy" />
             </a>
             <p class="slide-caption">Adventures with you</p>
           </div>
-          <!-- Slide 3 -->
           <div class="swiper-slide">
             <a href="photos/hero-3.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Laughing together">
               <img src="photos/hero-3.jpg" alt="Memory 3" loading="lazy" />
             </a>
             <p class="slide-caption">Laughing together</p>
           </div>
-          <!-- Slide 4 -->
           <div class="swiper-slide">
             <a href="photos/hero-4.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Date night">
               <img src="photos/hero-4.jpg" alt="Memory 4" loading="lazy" />
             </a>
             <p class="slide-caption">Date night</p>
           </div>
-          <!-- Slide 5 -->
           <div class="swiper-slide">
             <a href="photos/hero-5.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: My favorite view">
               <img src="photos/hero-5.jpg" alt="Memory 5" loading="lazy" />
             </a>
             <p class="slide-caption">My favorite view</p>
           </div>
-          <!-- Slide 6 -->
           <div class="swiper-slide">
             <a href="photos/hero-6.jpg" class="glightbox" data-gallery="carousel" data-glightbox="title: Together always">
               <img src="photos/hero-6.jpg" alt="Memory 6" loading="lazy" />
@@ -720,76 +1360,76 @@
     <!-- POLAROID PHOTO GRID -->
     <section class="section-memories">
       <h2 class="section-title" data-aos="fade-up">Memories I Treasure</h2>
-      <div class="section-divider" data-aos="fade-up" data-aos-delay="100">💖 💖 💖</div>
+      <div class="section-divider" data-aos="fade-up" data-aos-delay="100">💖</div>
 
       <div class="polaroid-grid">
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="0" style="--rotate: -3deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="0" style="--rotate: -3deg; --tape-rotate: 3deg;">
           <a href="photos/memory-01.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: A beautiful day">
             <img src="photos/memory-01.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">A beautiful day</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="80" style="--rotate: 2deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="80" style="--rotate: 2deg; --tape-rotate: -1deg;">
           <a href="photos/memory-02.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Coffee dates">
             <img src="photos/memory-02.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">Coffee dates</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="160" style="--rotate: -1deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="160" style="--rotate: -1deg; --tape-rotate: 2deg;">
           <a href="photos/memory-03.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Silly moments">
             <img src="photos/memory-03.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">Silly moments</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="240" style="--rotate: 3deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="240" style="--rotate: 3deg; --tape-rotate: -3deg;">
           <a href="photos/memory-04.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: You and me">
             <img src="photos/memory-04.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">You and me</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="0" style="--rotate: 2deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="0" style="--rotate: 2deg; --tape-rotate: 1deg;">
           <a href="photos/memory-05.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Weekend vibes">
             <img src="photos/memory-05.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">Weekend vibes</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="80" style="--rotate: -2deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="80" style="--rotate: -2deg; --tape-rotate: -2deg;">
           <a href="photos/memory-06.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: My happy place">
             <img src="photos/memory-06.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">My happy place</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="160" style="--rotate: 1deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="160" style="--rotate: 1deg; --tape-rotate: 3deg;">
           <a href="photos/memory-07.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Always smiling">
             <img src="photos/memory-07.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">Always smiling</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="240" style="--rotate: -3deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="240" style="--rotate: -3deg; --tape-rotate: -1deg;">
           <a href="photos/memory-08.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Love this one">
             <img src="photos/memory-08.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">Love this one</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="0" style="--rotate: -1deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="0" style="--rotate: -1deg; --tape-rotate: 2deg;">
           <a href="photos/memory-09.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Best day ever">
             <img src="photos/memory-09.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">Best day ever</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="80" style="--rotate: 2deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="80" style="--rotate: 2deg; --tape-rotate: -2deg;">
           <a href="photos/memory-10.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Perfect moment">
             <img src="photos/memory-10.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">Perfect moment</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="160" style="--rotate: -2deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="160" style="--rotate: -2deg; --tape-rotate: 1deg;">
           <a href="photos/memory-11.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Can't stop smiling">
             <img src="photos/memory-11.jpg" alt="Memory" loading="lazy" />
           </a>
           <p class="polaroid-caption">Can't stop smiling</p>
         </div>
-        <div class="polaroid" data-aos="fade-up" data-aos-delay="240" style="--rotate: 1deg;">
+        <div class="polaroid" data-aos="fade-up" data-aos-delay="240" style="--rotate: 1deg; --tape-rotate: -3deg;">
           <a href="photos/memory-12.jpg" class="glightbox" data-gallery="memories" data-glightbox="title: Forever grateful">
             <img src="photos/memory-12.jpg" alt="Memory" loading="lazy" />
           </a>
@@ -798,18 +1438,70 @@
       </div>
     </section>
 
+    <!-- REASONS I LOVE YOU -->
+    <section class="section-reasons">
+      <h2 class="section-title" data-aos="fade-up">Reasons I Love You</h2>
+      <div class="section-divider" data-aos="fade-up" data-aos-delay="100">✨</div>
+
+      <div class="reasons-grid">
+        <div class="reason-card" data-aos="fade-up" data-aos-delay="0">
+          <span class="reason-emoji">😊</span>
+          <h3 class="reason-title">Your Smile</h3>
+          <p class="reason-text">It lights up every room and makes my worst days disappear</p>
+        </div>
+        <div class="reason-card" data-aos="fade-up" data-aos-delay="100">
+          <span class="reason-emoji">😂</span>
+          <h3 class="reason-title">Your Laugh</h3>
+          <p class="reason-text">The most beautiful sound — I'd do anything to hear it every day</p>
+        </div>
+        <div class="reason-card" data-aos="fade-up" data-aos-delay="200">
+          <span class="reason-emoji">💪</span>
+          <h3 class="reason-title">Your Strength</h3>
+          <p class="reason-text">How you handle everything with grace inspires me endlessly</p>
+        </div>
+        <div class="reason-card" data-aos="fade-up" data-aos-delay="300">
+          <span class="reason-emoji">🤗</span>
+          <h3 class="reason-title">Your Kindness</h3>
+          <p class="reason-text">The way you care for everyone around you is truly special</p>
+        </div>
+        <div class="reason-card" data-aos="fade-up" data-aos-delay="400">
+          <span class="reason-emoji">🌙</span>
+          <h3 class="reason-title">Late Night Talks</h3>
+          <p class="reason-text">Those conversations that last until sunrise are my favorite</p>
+        </div>
+        <div class="reason-card" data-aos="fade-up" data-aos-delay="500">
+          <span class="reason-emoji">🏠</span>
+          <h3 class="reason-title">You Feel Like Home</h3>
+          <p class="reason-text">Wherever you are, that's where I belong</p>
+        </div>
+      </div>
+    </section>
+
     <!-- LOVE LETTER -->
     <section class="section-letter">
-      <div class="letter-container" data-aos="fade-up" data-aos-duration="1500">
-        <div class="letter-decoration">💌</div>
-        <h2 class="letter-title">A Letter For You</h2>
-        <div class="letter-body">
-          <p>Dear Kiki,</p>
-          <p>Write your personal love letter here. Tell her how much she means to you, share your favorite memories, and let her know why she's the one.</p>
-          <p>Every day with you is an adventure, and I wouldn't trade a single moment. You make everything brighter just by being you.</p>
-          <p>Here's to us, to every laugh, every late-night talk, and every little thing that makes us... us.</p>
-          <p class="letter-signature">With all my love,<br/>Forever Yours 💕</p>
+      <div class="letter-wrapper" data-aos="fade-up" data-aos-duration="1500">
+        <div class="letter-container">
+          <div class="letter-wax-seal">💌</div>
+          <div class="letter-decoration">💌</div>
+          <h2 class="letter-title">A Letter For You</h2>
+          <div class="letter-body">
+            <p class="letter-greeting">Dear Kiki,</p>
+            <p>Write your personal love letter here. Tell her how much she means to you, share your favorite memories, and let her know why she's the one.</p>
+            <p>Every day with you is an adventure, and I wouldn't trade a single moment. You make everything brighter just by being you.</p>
+            <p>Here's to us, to every laugh, every late-night talk, and every little thing that makes us... us.</p>
+            <p class="letter-signature">With all my love,<br/>Forever Yours 💕</p>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- PROMISE -->
+    <section class="section-promise">
+      <div class="promise-card" data-aos="zoom-in" data-aos-duration="1200">
+        <span class="promise-emoji">💍</span>
+        <h2 class="promise-title">My Promise To You</h2>
+        <p class="promise-text">To choose you every single day. To love you in the quiet moments and the loud ones. To be your partner, your best friend, and your biggest fan — always.</p>
+        <div class="promise-hearts">💕 💗 💕</div>
       </div>
     </section>
 
@@ -817,6 +1509,7 @@
     <footer class="section-footer">
       <div class="footer-hearts">💕 💗 💕</div>
       <p class="footer-text">Made with love for my Kiki</p>
+      <div class="footer-divider"></div>
       <p class="footer-year">Valentine's Day 2026</p>
     </footer>
 
@@ -824,7 +1517,9 @@
 
   <!-- MUSIC TOGGLE -->
   <button id="music-toggle" class="music-btn" aria-label="Toggle music">🎵</button>
-  <!-- Replace the src below with your own romantic song file, e.g. "music/song.mp3" -->
+  <!-- BACK TO TOP -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+  <!-- Replace the src below with your own romantic song file -->
   <audio id="bgMusic" loop preload="none">
     <source src="music/romantic-song.mp3" type="audio/mpeg" />
   </audio>
@@ -833,7 +1528,7 @@
   <audio id="hoverSound" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3"></audio>
   <audio id="yesSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
 
-  <!-- Libraries (loaded at end for performance) -->
+  <!-- Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
@@ -871,31 +1566,75 @@
     }
 
     /* ============================================
-       YES BUTTON → TRANSITION
+       YES BUTTON → ENHANCED TRANSITION
        ============================================ */
     yesBtn.addEventListener("click", () => {
       yesSound.play();
 
-      // Confetti burst 1
+      // Multi-stage confetti celebration
+      const colors = ['#ff4d6d', '#ff9a9e', '#fbc2eb', '#a18cd1', '#fad0c4', '#ff758f'];
+      const heartShapes = confetti.shapeFromText({ text: '❤️', scalar: 2 });
+
+      // Burst 1: Big center explosion
       confetti({
-        particleCount: 260,
-        spread: 120,
-        origin: { y: 0.65 }
+        particleCount: 200,
+        spread: 130,
+        origin: { y: 0.6 },
+        colors: colors,
+        ticks: 200
       });
 
-      // Confetti burst 2
+      // Burst 2: Heart-shaped confetti
       setTimeout(() => {
         confetti({
-          particleCount: 150,
+          particleCount: 40,
           spread: 80,
-          origin: { y: 0.5 }
+          origin: { y: 0.55 },
+          shapes: [heartShapes],
+          scalar: 2,
+          ticks: 200
         });
-      }, 300);
+      }, 250);
 
-      // Begin card exit
+      // Burst 3: Side cannons
+      setTimeout(() => {
+        confetti({
+          particleCount: 100,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.6 },
+          colors: colors
+        });
+        confetti({
+          particleCount: 100,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.6 },
+          colors: colors
+        });
+      }, 500);
+
+      // Burst 4: Gentle rain
+      setTimeout(() => {
+        confetti({
+          particleCount: 80,
+          spread: 160,
+          origin: { y: 0 },
+          gravity: 0.6,
+          ticks: 300,
+          colors: colors
+        });
+      }, 800);
+
+      // Screen flash
+      setTimeout(() => {
+        document.getElementById('screenFlash').classList.add('screen-flash--active');
+      }, 600);
+
+      // Card exit
       setTimeout(() => {
         card.classList.add("card--exit");
-      }, 800);
+      }, 900);
 
       // Switch to experience mode
       setTimeout(() => {
@@ -912,13 +1651,19 @@
         // Scroll to top
         window.scrollTo({ top: 0, behavior: "instant" });
 
-        // Initialize libraries
+        // Show scroll progress
+        document.getElementById('scrollProgress').style.display = 'block';
+
+        // Initialize everything
         initSwiper();
         initAOS();
         initGLightbox();
         initSparkles();
         initMusicToggle();
-      }, 1500);
+        initScrollProgress();
+        initHeroParticles();
+        initBackToTop();
+      }, 1600);
     });
 
     /* ============================================
@@ -932,9 +1677,9 @@
         slidesPerView: "auto",
         loop: true,
         coverflowEffect: {
-          rotate: 8,
+          rotate: 5,
           stretch: 0,
-          depth: 120,
+          depth: 140,
           modifier: 1,
           slideShadows: true
         },
@@ -958,7 +1703,7 @@
        ============================================ */
     function initAOS() {
       AOS.init({
-        duration: 800,
+        duration: 900,
         easing: "ease-out-cubic",
         once: true,
         offset: 80
@@ -980,16 +1725,16 @@
        SPARKLE CURSOR TRAIL
        ============================================ */
     function initSparkles() {
-      const sparkleEmojis = ["✨", "💖", "⭐", "💗"];
+      const sparkleEmojis = ["✨", "💖", "⭐", "💗", "🌟", "💕"];
       document.addEventListener("mousemove", (e) => {
-        if (Math.random() > 0.3) return;
+        if (Math.random() > 0.25) return;
         const sparkle = document.createElement("div");
         sparkle.className = "sparkle";
         sparkle.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
-        sparkle.style.left = e.clientX + "px";
-        sparkle.style.top = e.clientY + "px";
+        sparkle.style.left = (e.clientX + (Math.random() - 0.5) * 20) + "px";
+        sparkle.style.top = (e.clientY + (Math.random() - 0.5) * 20) + "px";
         document.body.appendChild(sparkle);
-        setTimeout(() => sparkle.remove(), 800);
+        setTimeout(() => sparkle.remove(), 900);
       });
     }
 
@@ -1001,7 +1746,6 @@
       const bgMusic = document.getElementById("bgMusic");
       bgMusic.volume = 0.3;
 
-      // Show the button
       musicBtn.style.display = "block";
 
       musicBtn.addEventListener("click", () => {
@@ -1018,22 +1762,129 @@
     }
 
     /* ============================================
+       SCROLL PROGRESS BAR
+       ============================================ */
+    function initScrollProgress() {
+      const progressBar = document.getElementById('scrollProgress');
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        progressBar.style.width = scrollPercent + '%';
+      });
+    }
+
+    /* ============================================
+       HERO PARTICLES CANVAS
+       ============================================ */
+    function initHeroParticles() {
+      const canvas = document.getElementById('heroParticles');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const heroSection = document.getElementById('heroSection');
+
+      function resize() {
+        canvas.width = heroSection.offsetWidth;
+        canvas.height = heroSection.offsetHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const particles = [];
+      const particleCount = 35;
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 3 + 1,
+          speedX: (Math.random() - 0.5) * 0.5,
+          speedY: (Math.random() - 0.5) * 0.5,
+          opacity: Math.random() * 0.4 + 0.1
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(p => {
+          p.x += p.speedX;
+          p.y += p.speedY;
+
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          if (p.y < 0) p.y = canvas.height;
+          if (p.y > canvas.height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+          ctx.fill();
+        });
+
+        // Draw connections between close particles
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(255, 255, 255, ${0.06 * (1 - dist / 120)})`;
+              ctx.lineWidth = 1;
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    /* ============================================
+       BACK TO TOP BUTTON
+       ============================================ */
+    function initBackToTop() {
+      const btn = document.getElementById('back-to-top');
+      btn.style.display = 'block';
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+          btn.classList.add('visible');
+        } else {
+          btn.classList.remove('visible');
+        }
+      });
+
+      btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    /* ============================================
        FLOATING HEARTS (background)
        ============================================ */
+    const heartEmojis = ['❤️', '💗', '💕', '💖', '🩷'];
     function createHeart() {
       const heart = document.createElement("div");
       heart.className = "heart";
-      heart.innerHTML = Math.random() > 0.5 ? "❤️" : "💗";
+      heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
       heart.style.left = Math.random() * 100 + "vw";
       heart.style.fontSize = Math.random() * 22 + 14 + "px";
       heart.style.animationDuration = Math.random() * 3 + 4 + "s";
-      heart.style.opacity = Math.random() * 0.5 + 0.4;
+      heart.style.opacity = Math.random() * 0.4 + 0.3;
 
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 8000);
     }
 
-    setInterval(createHeart, 380);
+    setInterval(createHeart, 400);
   </script>
 
 </body>
