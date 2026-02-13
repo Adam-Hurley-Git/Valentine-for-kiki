@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css" />
 
   <!-- Confetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
@@ -1572,59 +1572,64 @@
       yesSound.play();
 
       // Multi-stage confetti celebration
-      const colors = ['#ff4d6d', '#ff9a9e', '#fbc2eb', '#a18cd1', '#fad0c4', '#ff758f'];
-      const heartShapes = confetti.shapeFromText({ text: '❤️', scalar: 2 });
+      try {
+        const colors = ['#ff4d6d', '#ff9a9e', '#fbc2eb', '#a18cd1', '#fad0c4', '#ff758f'];
+        const heartShapes = confetti.shapeFromText({ text: '❤️', scalar: 2 });
 
-      // Burst 1: Big center explosion
-      confetti({
-        particleCount: 200,
-        spread: 130,
-        origin: { y: 0.6 },
-        colors: colors,
-        ticks: 200
-      });
-
-      // Burst 2: Heart-shaped confetti
-      setTimeout(() => {
+        // Burst 1: Big center explosion
         confetti({
-          particleCount: 40,
-          spread: 80,
-          origin: { y: 0.55 },
-          shapes: [heartShapes],
-          scalar: 2,
+          particleCount: 200,
+          spread: 130,
+          origin: { y: 0.6 },
+          colors: colors,
           ticks: 200
         });
-      }, 250);
 
-      // Burst 3: Side cannons
-      setTimeout(() => {
-        confetti({
-          particleCount: 100,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0, y: 0.6 },
-          colors: colors
-        });
-        confetti({
-          particleCount: 100,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1, y: 0.6 },
-          colors: colors
-        });
-      }, 500);
+        // Burst 2: Heart-shaped confetti
+        setTimeout(() => {
+          confetti({
+            particleCount: 40,
+            spread: 80,
+            origin: { y: 0.55 },
+            shapes: [heartShapes],
+            scalar: 2,
+            ticks: 200
+          });
+        }, 250);
 
-      // Burst 4: Gentle rain
-      setTimeout(() => {
-        confetti({
-          particleCount: 80,
-          spread: 160,
-          origin: { y: 0 },
-          gravity: 0.6,
-          ticks: 300,
-          colors: colors
-        });
-      }, 800);
+        // Burst 3: Side cannons
+        setTimeout(() => {
+          confetti({
+            particleCount: 100,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0, y: 0.6 },
+            colors: colors
+          });
+          confetti({
+            particleCount: 100,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1, y: 0.6 },
+            colors: colors
+          });
+        }, 500);
+
+        // Burst 4: Gentle rain
+        setTimeout(() => {
+          confetti({
+            particleCount: 80,
+            spread: 160,
+            origin: { y: 0 },
+            gravity: 0.6,
+            ticks: 300,
+            colors: colors
+          });
+        }, 800);
+      } catch (e) {
+        // Fallback confetti if shapeFromText not supported
+        confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
+      }
 
       // Screen flash
       setTimeout(() => {
